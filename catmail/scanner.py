@@ -4,6 +4,9 @@ from catmail.config import config
 
 class Scanner(Loggy):
 	def __init__(self, reader):
+		if type(reader) == str: # reader is addr
+			from catmail.reader import Reader
+			reader = Reader(reader)
 		self.scanners = {}
 		self.reader = reader
 		self.ticker = rel.timeout(None, self.tick)
