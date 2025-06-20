@@ -1,4 +1,4 @@
-import smtplib, yagmail
+import smtplib, yagmail, rel
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from catmail.util import TMP, strip_html, Loggy
