@@ -1,6 +1,7 @@
 import imaplib
 from email import message_from_bytes
 from catmail.util import Loggy
+from catmail.config import config
 
 class Reader(Loggy):
 	def __init__(self, addr):
