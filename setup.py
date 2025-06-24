@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='catmail',
-    version="0.1.3",
+    version="0.1.4",
     author='Mario Balibrera',
     author_email='mario.balibrera@gmail.com',
     license='MIT License',
@@ -13,7 +13,7 @@ setup(
     ],
     zip_safe = False,
     install_requires = [
-        "fyg >= 0.1.3.5",
+        "fyg >= 0.1.4.5",
         "rel >= 0.4.9.20",
         "yagmail >= 0.6.161"
     ],
