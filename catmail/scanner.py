@@ -1,4 +1,4 @@
-import rel
+import time, rel
 from catmail.util import Loggy
 from catmail.config import config
 
@@ -9,7 +9,8 @@ class Scanner(Loggy):
 			reader = Reader(reader)
 		self.scanners = {}
 		self.reader = reader
-		self.ticker = rel.timeout(None, self.tick)
+		if not config.sync:
+			self.ticker = rel.timeout(None, self.tick)
 
 	def criteria(self, sender=None, subject=None, unseen=True):
 		crits = []
@@ -38,16 +39,27 @@ class Scanner(Loggy):
 				founds.append(crit)
 		for found in founds:
 			del self.scanners[found]
-		return self.scanners # Falsy when empty
+		if self.scanners:
+			if config.sync:
+				time.sleep(config.scantick)
+				self.tick()
+			else:
+				return True
+		else:
+			self.log("stopping scanner")
 
 	def on(self, scanopts, cb=None, count=1, mailbox="inbox"):
-		if not self.scanners:
-			self.log("starting scanner")
-			self.ticker.add(config.scantick)
 		crit = self.criteria(**scanopts)
+		shouldstart = not self.scanners
 		self.log("watching for", crit)
 		self.scanners[crit] = {
 			"count": count,
 			"mailbox": mailbox,
 			"cb": cb or self.reader.show
 		}
+		if shouldstart:
+			self.log("starting scanner")
+			if config.sync:
+				self.tick()
+			else:
+				self.ticker.add(config.scantick)
