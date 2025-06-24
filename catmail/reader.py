@@ -28,16 +28,16 @@ class Reader(Loggy):
 		typ, data = self.conn.fetch(num, mparts)
 		return message_from_bytes(data[0][1])
 
-	def read(self, msg):
+	def read(self, msg, variety="plain"):
 		bod = msg
 		if msg.is_multipart():
 			for part in msg.walk():
-				if part.get_content_type() == "text/plain":
+				if part.get_content_type() == "text/%s"%(variety,):
 					bod = part
 		return bod.get_payload(decode=True).decode()
 
-	def show(self, msg):
-		body = self.read(msg)
+	def show(self, msg, variety="plain"): # or html
+		body = self.read(msg, variety)
 		self.log("\n\nfrom:", msg['from'], "\nsubject:",
 			msg['subject'], "\n\nbody:", body)
 		return body
