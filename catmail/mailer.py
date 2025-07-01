@@ -82,7 +82,7 @@ class Mailer(Loggy):
 			to, subject, body, bcc = self.queue.pop(0)
 			self._noop()
 			self._emit(to, subject, body, bcc)
-		self.log("closing mail thread")
+		self.log(config.sync and "finished sending" or "closing mail thread")
 		self.churning = False
 
 	def _send(self, to, subject, body, bcc):
@@ -95,9 +95,13 @@ class Mailer(Loggy):
 		self.log('enqueueing email "', subject, '" to', to)
 		self.queue.append([to, subject, body, bcc])
 		if not self.churning:
-			self.log('spawning mail thread')
 			self.churning = True
-			rel.thread(self._sender)
+			if config.sync:
+				self.log("running _sender")
+				self._sender()
+			else:
+				self.log('spawning mail thread')
+				rel.thread(self._sender)
 
 	def on(self, event_name, cb):
 		self.cbs[event_name] = cb
