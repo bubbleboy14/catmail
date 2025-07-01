@@ -1,5 +1,5 @@
 import time, rel
-from catmail.util import Loggy
+from fyg.util import Loggy
 from catmail.config import config
 
 class Scanner(Loggy):

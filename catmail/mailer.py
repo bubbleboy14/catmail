@@ -1,10 +1,11 @@
 import smtplib, yagmail, rel
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from catmail.util import TMP, strip_html, Loggy
+from fyg.util import Named
+from catmail.util import TMP, strip_html
 from catmail.config import config
 
-class Mailer(Loggy):
+class Mailer(Named):
 	def __init__(self, addr, mailername=None):
 		self.addr = addr
 		self.name = mailername
