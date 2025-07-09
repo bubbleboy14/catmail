@@ -3,4 +3,4 @@ from .mailer import Mailer
 from .reader import Reader
 from .scanner import Scanner
 
-__version__ = "0.1.7"
+__version__ = "0.1.8"
