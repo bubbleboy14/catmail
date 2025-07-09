@@ -49,7 +49,7 @@ class Mailer(Named):
 		return args
 
 	def _body(self, sender, to, subject, body):
-		if config.mailhtml:
+		if config.html:
 			mpmsg = MIMEMultipart('alternative')
 			mpmsg['Subject'] = subject
 			mpmsg['From'] = sender
