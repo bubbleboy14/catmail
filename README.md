@@ -1,4 +1,4 @@
 # catmail
 simple classes for email automation
 
-v0.1.6
+v0.1.7
