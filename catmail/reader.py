@@ -34,7 +34,7 @@ class Reader(Loggy):
 			for part in msg.walk():
 				if part.get_content_type() == "text/%s"%(variety,):
 					bod = part
-		return bod.get_payload(decode=True).decode()
+		return bod.get_payload()#.decode()
 
 	def show(self, msg, variety="plain"): # or html
 		body = self.read(msg, variety)
