@@ -34,7 +34,7 @@ class Mailer(Named):
 	def _refresh(self):
 		self.log('refreshing smtp connection')
 		if self._yag:
-			self._yag.login(config.cache("email password? "))
+			self._yag.login()#config.cache("email password? "))
 			self._yag.send_unsent()
 		elif self._smtp:
 			self._smtp = smtplib.SMTP('localhost')
