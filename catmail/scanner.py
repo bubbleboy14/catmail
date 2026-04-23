@@ -12,18 +12,20 @@ class Scanner(Loggy):
 		if not config.sync:
 			self.ticker = rel.timeout(None, self.tick)
 
-	def criteria(self, sender=None, subject=None, unseen=True):
+	def criteria(self, sender=None, recipient=None, subject=None, unseen=True):
 		crits = []
 		if sender:
 			crits.append('FROM "%s"'%(sender,))
+		if recipient:
+			crits.append('TO "%s"'%(recipient,))
 		if subject:
 			crits.append('SUBJECT "%s"'%(subject,))
 		if unseen:
 			crits.append("UNSEEN")
 		return "(%s)"%(" ".join(crits),)
 
-	def scan(self, sender=None, subject=None, unseen=True, count=1, mailbox="inbox"):
-		return self.check(self.criteria(sender, subject, unseen), count, mailbox)
+	def scan(self, sender=None, recipient=None, subject=None, unseen=True, count=1, mailbox="inbox"):
+		return self.check(self.criteria(sender, recipient, subject, unseen), count, mailbox)
 
 	def check(self, crit="UNSEEN", count=1, mailbox="inbox"):
 		self.log("scanning", mailbox, "for", crit)
