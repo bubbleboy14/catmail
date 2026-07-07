@@ -15,14 +15,25 @@ class Scanner(Loggy):
 	def criteria(self, sender=None, recipient=None, subject=None, unseen=True):
 		crits = []
 		if sender:
-			crits.append('FROM "%s"'%(sender,))
+			crits.append(self.critors(sender, "FROM"))
 		if recipient:
-			crits.append('TO "%s"'%(recipient,))
+			crits.append(self.critors(recipient, "TO"))
 		if subject:
-			crits.append('SUBJECT "%s"'%(subject,))
+			crits.append(self.critors(subject, "SUBJECT"))
 		if unseen:
 			crits.append("UNSEEN")
 		return "(%s)"%(" ".join(crits),)
+
+	def critors(self, value, criteria="FROM"):
+		if type(value) not in (list, tuple):
+			return '%s "%s"'%(criteria, value)
+		crits = ['%s "%s"'%(criteria, v) for v in value]
+		if not crits:
+			return ""
+		crit = crits.pop(0)
+		while crits:
+			crit = "OR %s %s"%(crit, crits.pop(0))
+		return crit
 
 	def scan(self, sender=None, recipient=None, subject=None, unseen=True, count=1, mailbox="inbox"):
 		return self.check(self.criteria(sender, recipient, subject, unseen), count, mailbox)
