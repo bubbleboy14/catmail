@@ -40,7 +40,12 @@ class Scanner(Loggy):
 
 	def check(self, crit="UNSEEN", count=1, mailbox="inbox"):
 		self.log("scanning", mailbox, "for", crit)
-		return self.reader.inbox(count, crit, mailbox=mailbox)
+		try: # transient network error etc
+			return self.reader.inbox(count, crit, mailbox=mailbox)
+		except Exception as e:
+			self.log("check failed! retrying in", config.scantick, "seconds")
+			time.sleep(config.scantick)
+			return self.reader.inbox(count, crit, mailbox=mailbox)
 
 	def tick(self):
 		founds = []
